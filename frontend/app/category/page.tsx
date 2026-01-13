@@ -1,12 +1,13 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useCategories } from '@/hooks/useCategories';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import CategoryCard from '@/components/CategoryCard';
 import LoadingSkeleton from '@/components/LoadingSkeleton';
 
-export default function CategoriesPage() {
+function CategoriesContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const navigationSlug = searchParams.get('navigation') || undefined;
@@ -62,5 +63,13 @@ export default function CategoriesPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function CategoriesPage() {
+  return (
+    <Suspense fallback={<LoadingSkeleton count={6} />}>
+      <CategoriesContent />
+    </Suspense>
   );
 }

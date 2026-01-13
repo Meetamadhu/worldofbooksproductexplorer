@@ -1,7 +1,7 @@
 {
-  "name": "product-data-explorer-frontend",
+  "name": "webproductexplorer-frontend",
   "version": "0.0.1",
-  "description": "Frontend for Product Data Explorer",
+  "description": "Frontend for Web Product Explorer",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000",

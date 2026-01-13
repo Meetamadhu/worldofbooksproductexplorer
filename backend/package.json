@@ -1,7 +1,7 @@
 {
-  "name": "product-data-explorer-backend",
+  "name": "webproductexplorer-backend",
   "version": "0.0.1",
-  "description": "Backend for Product Data Explorer",
+  "description": "Backend for Web Product Explorer",
   "author": "Your Name",
   "private": true,
   "license": "MIT",

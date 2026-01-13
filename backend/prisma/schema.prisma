@@ -1,0 +1,140 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Navigation headings (e.g., "Books", "Categories", etc.)
+model Navigation {
+  id            String     @id @default(cuid())
+  title         String     @unique
+  slug          String     @unique
+  sourceUrl     String?
+  lastScrapedAt DateTime?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  categories    Category[]
+
+  @@index([slug])
+  @@index([lastScrapedAt])
+}
+
+// Categories and subcategories
+model Category {
+  id              String      @id @default(cuid())
+  navigationId    String
+  navigation      Navigation  @relation(fields: [navigationId], references: [id], onDelete: Cascade)
+  parentId        String?
+  parent          Category?   @relation("CategoryToParent", fields: [parentId], references: [id], onDelete: Cascade)
+  children        Category[]  @relation("CategoryToParent")
+  title           String
+  slug            String
+  productCount    Int         @default(0)
+  description     String?
+  imageUrl        String?
+  lastScrapedAt   DateTime?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  products        Product[]
+
+  @@unique([navigationId, slug])
+  @@index([navigationId])
+  @@index([parentId])
+  @@index([slug])
+  @@index([lastScrapedAt])
+}
+
+// Products
+model Product {
+  id              String          @id @default(cuid())
+  sourceId        String          @unique
+  sourceUrl       String          @unique
+  categoryId      String?
+  category        Category?       @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  title           String
+  author          String?
+  price           Float?
+  currency        String          @default("GBP")
+  imageUrl        String?
+  description     String?
+  lastScrapedAt   DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  productDetails  ProductDetail?
+  reviews         Review[]
+
+  @@index([sourceId])
+  @@index([categoryId])
+  @@index([lastScrapedAt])
+  @@index([sourceUrl])
+}
+
+// Product details and metadata
+model ProductDetail {
+  id              String   @id @default(cuid())
+  productId       String   @unique
+  product         Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  description     String?
+  publisher       String?
+  publicationDate DateTime?
+  isbn            String?
+  pages           Int?
+  language        String?
+  specs           Json?     // Store JSON specs
+  ratingsAvg      Float?    @default(0)
+  reviewsCount    Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([productId])
+}
+
+// User reviews
+model Review {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  author    String
+  rating    Int      // 1-5
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+  @@index([rating])
+}
+
+// Scrape jobs (track scraping history)
+model ScrapeJob {
+  id         String   @id @default(cuid())
+  targetUrl  String
+  targetType String   // "navigation", "category", "product", etc.
+  status     String   // "pending", "in_progress", "completed", "failed"
+  startedAt  DateTime @default(now())
+  finishedAt DateTime?
+  errorLog   String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([status])
+  @@index([targetType])
+  @@index([createdAt])
+}
+
+// User browsing history
+model ViewHistory {
+  id        String   @id @default(cuid())
+  sessionId String   // User session identifier
+  pathJson  String   // JSON array of visited paths
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([sessionId])
+  @@index([createdAt])
+}

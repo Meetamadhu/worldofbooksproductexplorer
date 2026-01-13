@@ -1,0 +1,61 @@
+### World of Books Scraper API Requests
+### Use with REST Client extension in VS Code
+
+@apiUrl = http://localhost:4001/api
+@wobUrl = https://www.worldofbooks.com
+
+### 1. Quick Start - Scrape World of Books Navigation
+POST {{apiUrl}}/scraper/scrape-worldofbooks
+
+### 2. Trigger Navigation Scrape
+POST {{apiUrl}}/scraper/trigger
+Content-Type: application/json
+
+{
+  "targetUrl": "{{wobUrl}}",
+  "targetType": "navigation"
+}
+
+### 3. Trigger Category Scrape (adjust URL to actual category)
+POST {{apiUrl}}/scraper/trigger
+Content-Type: application/json
+
+{
+  "targetUrl": "{{wobUrl}}/categories/fiction",
+  "targetType": "category"
+}
+
+### 4. Trigger Product Scrape (adjust URL to actual product)
+POST {{apiUrl}}/scraper/trigger
+Content-Type: application/json
+
+{
+  "targetUrl": "{{wobUrl}}/product/sample-book-123",
+  "targetType": "product"
+}
+
+### 5. Get All Scrape Jobs
+GET {{apiUrl}}/scraper/jobs
+
+### 6. Get Specific Job Status (replace with actual jobId)
+@jobId = clzt1234567890
+GET {{apiUrl}}/scraper/job/{{jobId}}
+
+### 7. Get All Products
+GET {{apiUrl}}/products
+
+### 8. Get Products with Pagination
+GET {{apiUrl}}/products?skip=0&limit=10
+
+### 9. Get All Navigation
+GET {{apiUrl}}/navigation
+
+### 10. Get All Categories
+GET {{apiUrl}}/categories
+
+### 11. Get Single Product (replace with actual productId)
+@productId = clzt1234567890
+GET {{apiUrl}}/products/{{productId}}
+
+### 12. Health Check
+GET {{apiUrl}}/health

@@ -15,41 +15,12 @@ const nextConfig = {
   },
   swcMinify: true,
   compress: true,
-  generateEtags: true,
-  poweredByHeader: false,
-  productionBrowserSourceMaps: false,
-  optimizeFonts: true,
-  optimizePackageImports: [
-    'swr',
-    'axios',
-  ],
-  env: {
-    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000',
+  distDir: '.next',
+  typescript: {
+    ignoreBuildErrors: false,
   },
-  headers: async () => {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on',
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
-          },
-        ],
-      },
-    ];
+  eslint: {
+    ignoreDuringBuilds: false,
   },
 };
 

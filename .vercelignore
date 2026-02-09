@@ -1,0 +1,8 @@
+backend/
+node_modules/
+.git/
+.gitignore
+README.md
+SCRAPER_README.md
+API_DOCUMENTATION.md
+docker-compose.yml

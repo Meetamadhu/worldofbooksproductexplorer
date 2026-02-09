@@ -26,8 +26,8 @@ export default function Products() {
   return (
     <div className="container" style={{ padding: '2rem 1rem' }}>
       <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '0.5rem', color: 'var(--primary-orange)' }}>All Products</h1>
-        <p style={{ color: 'var(--light-orange)' }}>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '0.5rem', color: '#ffffff' }}>All Products</h1>
+        <p style={{ color: '#d1fae5' }}>
           Browse our complete catalog of {total} books
         </p>
       </div>

@@ -43,7 +43,7 @@ export default function Home() {
 
       {/* Navigation Categories */}
       <section className="container" style={{ padding: '3rem 1rem' }}>
-        <h2 style={{ fontSize: '2rem', marginBottom: '2rem', textAlign: 'center', color: 'var(--primary-blue)' }}>
+        <h2 style={{ fontSize: '2rem', marginBottom: '2rem', textAlign: 'center', color: '#ffffff' }}>
           Browse by Category
         </h2>
         

@@ -20,8 +20,12 @@ export class ProductService {
       orderBy.price = 'asc';
     } else if (sortBy === 'price-desc') {
       orderBy.price = 'desc';
-    } else if (sortBy === 'title') {
+    } else if (sortBy === 'title-asc') {
       orderBy.title = 'asc';
+    } else if (sortBy === 'title-desc') {
+      orderBy.title = 'desc';
+    } else if (sortBy === 'newest') {
+      orderBy.createdAt = 'desc';
     } else {
       orderBy.createdAt = 'desc';
     }

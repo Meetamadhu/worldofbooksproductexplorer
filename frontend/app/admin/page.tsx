@@ -74,7 +74,7 @@ export default function AdminPage() {
 
   return (
     <div className="container" style={{ padding: '2rem 1rem' }}>
-      <h1 style={{ fontSize: '2.5rem', marginBottom: '2rem', color: 'var(--primary-orange)' }}>
+      <h1 style={{ fontSize: '2.5rem', marginBottom: '2rem', color: '#10b981' }}>
         🔧 Admin - Scraper Control
       </h1>
 

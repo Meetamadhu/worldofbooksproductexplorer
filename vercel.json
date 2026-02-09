@@ -3,7 +3,12 @@
   "builds": [
     {
       "src": "frontend/package.json",
-      "use": "@vercel/next"
+      "use": "@vercel/next",
+      "config": {
+        "maxLambdaSize": "50mb",
+        "memory": 3008,
+        "timeout": 30
+      }
     }
   ],
   "routes": [
@@ -11,5 +16,6 @@
       "src": "/(.*)",
       "dest": "frontend/$1"
     }
-  ]
+  ],
+  "outputDirectory": "frontend/.next"
 }

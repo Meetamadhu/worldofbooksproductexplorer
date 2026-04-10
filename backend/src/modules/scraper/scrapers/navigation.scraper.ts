@@ -33,47 +33,69 @@ export class NavigationScraper {
       requestHandler: async ({ page }) => {
         logger.log('Scraping homepage...');
 
-        await page.waitForSelector('nav, header', { timeout: 10000 }).catch(() => null);
+        // Wait for network to settle so JS-rendered navigation is present
+        await page.waitForLoadState('networkidle', { timeout: 30000 }).catch(() => {
+          logger.warn('Network did not reach idle; continuing with what is rendered');
+        });
+
+        // Also wait for at least one navigation/header element
+        await page.waitForSelector('nav, header, [role="navigation"]', { timeout: 10000 }).catch(() => null);
 
         const navItems = await page.evaluate(() => {
           const items: { title: string; url: string }[] = [];
           const selectors = [
+            // Language-based paths (en-gb, en-us, etc.)
             'nav a[href*="/en-"]',
             'header a[href*="/en-"]',
-            '.navigation a',
+            // Generic nav roles / classes
             '[role="navigation"] a',
+            '.navigation a',
+            '.nav a',
+            '.navbar a',
+            '.main-nav a',
+            '.site-nav a',
+            // Shopify / Hydrogen patterns
+            '.header__nav a',
+            '[class*="HeaderNav"] a',
+            '[class*="header-nav"] a',
+            '[class*="MainNav"] a',
+            '[class*="menu-item"] a',
+            // Broad fallback: all anchors inside header/nav
+            'header a',
+            'nav a',
           ];
 
           for (const selector of selectors) {
             const links = document.querySelectorAll(selector);
-            if (links.length > 0) {
-              links.forEach((link) => {
-                const href = (link as HTMLAnchorElement).href;
-                const text = link.textContent?.trim() || '';
+            if (links.length === 0) continue;
 
-                if (
-                  text &&
-                  href &&
-                  !href.includes('account') &&
-                  !href.includes('cart') &&
-                  !href.includes('search') &&
-                  text.length > 2
-                ) {
-                  items.push({
-                    title: text,
-                    url: href,
-                  });
-                }
-              });
-              break;
-            }
+            links.forEach((link) => {
+              const href = (link as HTMLAnchorElement).href;
+              const text = link.textContent?.trim() || '';
+
+              if (
+                text &&
+                href &&
+                !href.includes('account') &&
+                !href.includes('cart') &&
+                !href.includes('search') &&
+                !href.includes('login') &&
+                !href.includes('wishlist') &&
+                text.length > 2 &&
+                text.length < 60
+              ) {
+                items.push({ title: text, url: href });
+              }
+            });
+
+            if (items.length > 0) break;
           }
 
           return items;
         });
 
         const seen = new Set<string>();
-        navItems.forEach((item) => {
+        navItems.forEach((item: { title: string; url: string }) => {
           if (!seen.has(item.url)) {
             seen.add(item.url);
             headings.push(item);

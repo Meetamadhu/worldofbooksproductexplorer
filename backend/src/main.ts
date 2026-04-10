@@ -5,11 +5,17 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import * as dotenv from 'dotenv';
+import { Request, Response } from 'express';
 
 dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Avoid noisy 404 logs from browser favicon probing.
+  app.use('/favicon.ico', (_req: Request, res: Response) => {
+    res.status(204).end();
+  });
 
   // Enable CORS
   app.enableCors({

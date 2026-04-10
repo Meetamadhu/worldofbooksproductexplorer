@@ -6,10 +6,10 @@ export default function Footer() {
       <div className="footer-content">
         <div>
           <h4>📚 Product Explorer</h4>
-          <p style={{ color: '#9ca3af', marginBottom: '1rem' }}>
+          <p style={{ color: 'var(--text-gray)', marginBottom: '1rem' }}>
             Discover and explore amazing products from World of Books.
           </p>
-          <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+          <p style={{ fontSize: '0.875rem', color: 'var(--text-gray)' }}>
             © 2026 Product Data Explorer
           </p>
         </div>

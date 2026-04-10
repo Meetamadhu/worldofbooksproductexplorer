@@ -7,31 +7,28 @@ interface CategoryCardProps {
 
 export default function CategoryCard({ category }: CategoryCardProps) {
   return (
-    <Link href={`/category/${category.slug}`}>
-      <div className="category-card" style={{ height: '100%' }}>
-        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📚</div>
-        
-        <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '0.75rem', color: 'var(--text-dark)' }}>
-          {category.title}
-        </h3>
-        
-        {category.description && (
-          <p style={{ color: 'var(--text-gray)', fontSize: '0.875rem', marginBottom: '1rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-            {category.description}
-          </p>
-        )}
-        
-        <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--border-gray)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          {category.productCount !== undefined && (
-            <span style={{ fontSize: '0.875rem', fontWeight: '600', color: 'var(--text-gray)' }}>
-              {category.productCount} {category.productCount === 1 ? 'product' : 'products'}
-            </span>
-          )}
-          <span style={{ fontSize: '0.875rem', fontWeight: 'bold', color: 'var(--primary-orange)' }}>
-            Explore →
+    <Link href={`/category/${category.slug}`} className="category-browse-card-link">
+      <article className="category-browse-card">
+        <div className="category-browse-card__body">
+          <span className="category-browse-card__icon" aria-hidden>
+            📚
           </span>
+          <h3 className="category-browse-card__title">{category.title}</h3>
+          {category.description && (
+            <p className="category-browse-card__desc">{category.description}</p>
+          )}
         </div>
-      </div>
+        <div className="category-browse-card__footer">
+          {category.productCount !== undefined ? (
+            <span className="category-browse-card__count" data-suf="products">
+              {category.productCount}
+            </span>
+          ) : (
+            <span className="category-browse-card__count category-browse-card__count--empty" />
+          )}
+          <span className="category-browse-card__cta">Explore →</span>
+        </div>
+      </article>
     </Link>
   );
 }

@@ -15,14 +15,12 @@ function CategoriesContent() {
   const { categories, loading, error } = useCategories(navigationSlug);
 
   return (
-    <div className="container" style={{ padding: '2rem 1rem' }}>
-      <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '0.5rem', color: 'var(--primary-orange)' }}>
+    <div className="container categories-page" style={{ padding: '2rem 1rem' }}>
+      <div className="categories-page__header">
+        <h1 className="categories-page__title">
           {navigationSlug ? `Categories in ${navigationSlug}` : 'All Categories'}
         </h1>
-        <p style={{ color: 'var(--primary-orange)' }}>
-          Browse books by category
-        </p>
+        <p className="categories-page__subtitle">Browse books by category</p>
       </div>
 
       {loading && (
@@ -56,7 +54,7 @@ function CategoriesContent() {
       )}
 
       {!loading && !error && categories.length > 0 && (
-        <div className="product-grid">
+        <div className="product-grid categories-page__grid">
           {categories.map((category) => (
             <CategoryCard key={category.id} category={category} />
           ))}

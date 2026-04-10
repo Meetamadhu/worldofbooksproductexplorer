@@ -5,13 +5,21 @@ import ProductGrid from '@/components/ProductGrid';
 import LoadingSkeleton from '@/components/LoadingSkeleton';
 import Pagination from '@/components/Pagination';
 import FilterPanel from '@/components/FilterPanel';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 export default function Products() {
+  const searchParams = useSearchParams();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
   const [sortBy, setSortBy] = useState('');
+
+  useEffect(() => {
+    const query = searchParams.get('search') || '';
+    setSearch(query);
+    setPage(1);
+  }, [searchParams]);
 
   const { products, total, loading, error } = useProducts({
     page,
@@ -26,8 +34,8 @@ export default function Products() {
   return (
     <div className="container" style={{ padding: '2rem 1rem' }}>
       <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '0.5rem', color: '#ffffff' }}>All Products</h1>
-        <p style={{ color: '#d1fae5' }}>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '0.5rem', color: 'var(--text-dark)' }}>All Products</h1>
+        <p style={{ color: 'var(--text-gray)' }}>
           Browse our complete catalog of {total} books
         </p>
       </div>

@@ -53,6 +53,19 @@ export class ScraperController {
     return this.scraperService.getScrapeJobStatus(jobId);
   }
 
+  // Alias: GET jobs/:jobId  (matches the plural form used by some clients)
+  @Get('jobs/:jobId')
+  @ApiOperation({ 
+    summary: 'Get scrape job status (alias)', 
+    description: 'Alias for GET /scraper/job/:jobId' 
+  })
+  @ApiParam({ name: 'jobId', type: String, description: 'Scrape job ID' })
+  @ApiResponse({ status: 200, description: 'Job status retrieved successfully' })
+  @ApiResponse({ status: 404, description: 'Job not found' })
+  async getScrapeJobStatusAlias(@Param('jobId') jobId: string) {
+    return this.scraperService.getScrapeJobStatus(jobId);
+  }
+
   @Get('jobs')
   @ApiOperation({ 
     summary: 'Get all scrape jobs', 

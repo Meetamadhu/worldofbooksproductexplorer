@@ -38,7 +38,7 @@ export class ProductDetailScraper {
         ];
 
         for (const selector of reviewSelectors) {
-          $(selector).each((index, element) => {
+          $(selector).each((index: number, element: any) => {
             const $review = $(element);
 
             const author =
@@ -103,7 +103,7 @@ export class ProductDetailScraper {
 
         // Look for specifications table or list
         $('.specifications li, .specs li, .product-specs li').each(
-          (index, element) => {
+          (index: number, element: any) => {
             const text = $(element).text().trim();
             const parts = text.split(':');
             if (parts.length === 2) {
@@ -116,7 +116,7 @@ export class ProductDetailScraper {
 
         // Look for key-value pairs in tables
         $('.specifications tr, .specs tr, .product-info tr').each(
-          (index, element) => {
+          (index: number, element: any) => {
             const key = $(element).find('th, td:first-child').text().trim();
             const value = $(element).find('td:last-child').text().trim();
             if (key && value) {

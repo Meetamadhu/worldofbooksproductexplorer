@@ -19,6 +19,7 @@ describe('ProductService', () => {
     product: {
       findMany: jest.fn(),
       findUnique: jest.fn(),
+      count: jest.fn(),
     },
   };
 
@@ -38,50 +39,75 @@ describe('ProductService', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   describe('getProducts', () => {
-    it('should return an array of products with default pagination', async () => {
+    it('should return paginated products with default pagination', async () => {
       const mockProducts = [mockProduct];
       mockPrismaService.product.findMany.mockResolvedValue(mockProducts);
+      mockPrismaService.product.count.mockResolvedValue(1);
 
       const result = await service.getProducts();
 
-      expect(result).toEqual(mockProducts);
+      expect(result).toEqual({
+        data: mockProducts,
+        total: 1,
+        page: 1,
+        limit: 12,
+      });
       expect(mockPrismaService.product.findMany).toHaveBeenCalledWith({
+        where: {},
         skip: 0,
-        take: 10,
+        take: 12,
+        orderBy: { createdAt: 'desc' },
         include: { productDetails: true, reviews: true },
       });
+      expect(mockPrismaService.product.count).toHaveBeenCalledWith({ where: {} });
     });
 
-    it('should return products with custom pagination', async () => {
+    it('should return paginated products with custom pagination', async () => {
       const mockProducts = [mockProduct];
       mockPrismaService.product.findMany.mockResolvedValue(mockProducts);
+      mockPrismaService.product.count.mockResolvedValue(15);
 
       const result = await service.getProducts(5, 20);
 
-      expect(result).toEqual(mockProducts);
+      expect(result).toEqual({
+        data: mockProducts,
+        total: 15,
+        page: 1,
+        limit: 20,
+      });
       expect(mockPrismaService.product.findMany).toHaveBeenCalledWith({
+        where: {},
         skip: 5,
         take: 20,
+        orderBy: { createdAt: 'desc' },
         include: { productDetails: true, reviews: true },
       });
+      expect(mockPrismaService.product.count).toHaveBeenCalledWith({ where: {} });
     });
 
-    it('should return empty array when no products exist', async () => {
+    it('should return empty data when no products exist', async () => {
       mockPrismaService.product.findMany.mockResolvedValue([]);
+      mockPrismaService.product.count.mockResolvedValue(0);
 
       const result = await service.getProducts();
 
-      expect(result).toEqual([]);
+      expect(result).toEqual({
+        data: [],
+        total: 0,
+        page: 1,
+        limit: 12,
+      });
     });
 
     it('should handle database errors', async () => {
       mockPrismaService.product.findMany.mockRejectedValue(
         new Error('Database error'),
       );
+      mockPrismaService.product.count.mockResolvedValue(0);
 
       await expect(service.getProducts()).rejects.toThrow('Database error');
     });
@@ -123,45 +149,72 @@ describe('ProductService', () => {
     it('should return products for a category with default pagination', async () => {
       const mockProducts = [mockProduct];
       mockPrismaService.product.findMany.mockResolvedValue(mockProducts);
+      mockPrismaService.product.count.mockResolvedValue(1);
 
       const result = await service.getProductsByCategory('cat-1');
 
-      expect(result).toEqual(mockProducts);
+      expect(result).toEqual({
+        data: mockProducts,
+        total: 1,
+        page: 1,
+        limit: 12,
+      });
       expect(mockPrismaService.product.findMany).toHaveBeenCalledWith({
         where: { categoryId: 'cat-1' },
         skip: 0,
-        take: 10,
+        take: 12,
+        orderBy: { createdAt: 'desc' },
         include: { productDetails: true, reviews: true },
+      });
+      expect(mockPrismaService.product.count).toHaveBeenCalledWith({
+        where: { categoryId: 'cat-1' },
       });
     });
 
     it('should return products for a category with custom pagination', async () => {
       const mockProducts = [mockProduct];
       mockPrismaService.product.findMany.mockResolvedValue(mockProducts);
+      mockPrismaService.product.count.mockResolvedValue(30);
 
       const result = await service.getProductsByCategory('cat-1', 10, 25);
 
-      expect(result).toEqual(mockProducts);
+      expect(result).toEqual({
+        data: mockProducts,
+        total: 30,
+        page: 1,
+        limit: 25,
+      });
       expect(mockPrismaService.product.findMany).toHaveBeenCalledWith({
         where: { categoryId: 'cat-1' },
         skip: 10,
         take: 25,
+        orderBy: { createdAt: 'desc' },
         include: { productDetails: true, reviews: true },
+      });
+      expect(mockPrismaService.product.count).toHaveBeenCalledWith({
+        where: { categoryId: 'cat-1' },
       });
     });
 
-    it('should return empty array when category has no products', async () => {
+    it('should return empty data when category has no products', async () => {
       mockPrismaService.product.findMany.mockResolvedValue([]);
+      mockPrismaService.product.count.mockResolvedValue(0);
 
       const result = await service.getProductsByCategory('empty-cat');
 
-      expect(result).toEqual([]);
+      expect(result).toEqual({
+        data: [],
+        total: 0,
+        page: 1,
+        limit: 12,
+      });
     });
 
     it('should handle database errors', async () => {
       mockPrismaService.product.findMany.mockRejectedValue(
         new Error('Database error'),
       );
+      mockPrismaService.product.count.mockResolvedValue(0);
 
       await expect(
         service.getProductsByCategory('cat-1'),

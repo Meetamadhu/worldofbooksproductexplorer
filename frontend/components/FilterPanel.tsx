@@ -29,19 +29,59 @@ export default function FilterPanel({ onCategoryChange, onSortChange }: FilterPa
   };
 
   return (
-    <div className="filter-panel" style={{ position: 'sticky', top: '5rem' }}>
-      <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+    <div
+      className="filter-panel"
+      style={{
+        position: 'sticky',
+        top: '5rem',
+        background: 'linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%)',
+        border: '1px solid #1d4ed8',
+        borderRadius: '0.75rem',
+        padding: '1rem',
+        boxShadow: '0 8px 24px rgba(15, 23, 42, 0.06)',
+      }}
+    >
+      <h3
+        style={{
+          marginBottom: '1.5rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          backgroundColor: '#1e40af',
+          padding: '0.5rem 0.75rem',
+          borderRadius: '0.5rem',
+          border: '1px solid #60a5fa',
+          color: '#eff6ff',
+          fontWeight: 700,
+        }}
+      >
         🔍 Filters
       </h3>
       
       {/* Category Filter */}
-      <div className="filter-group">
-        <label>
+      <div className="filter-group" style={{ marginBottom: '1rem' }}>
+        <label
+          style={{
+            display: 'block',
+            marginBottom: '0.5rem',
+            fontWeight: 600,
+            color: '#dbeafe',
+            fontSize: '0.95rem',
+          }}
+        >
           📚 Category
         </label>
         <select
           value={selectedCategory}
           onChange={(e) => handleCategoryChange(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '0.6rem 0.75rem',
+            border: '1px solid #93c5fd',
+            borderRadius: '0.5rem',
+            backgroundColor: '#ffffff',
+            color: '#111827',
+          }}
         >
           <option value="">All Categories</option>
           {categories.map((cat) => (
@@ -54,12 +94,28 @@ export default function FilterPanel({ onCategoryChange, onSortChange }: FilterPa
 
       {/* Sort Filter */}
       <div className="filter-group">
-        <label>
+        <label
+          style={{
+            display: 'block',
+            marginBottom: '0.5rem',
+            fontWeight: 600,
+            color: '#dbeafe',
+            fontSize: '0.95rem',
+          }}
+        >
           🔄 Sort By
         </label>
         <select
           value={selectedSort}
           onChange={(e) => handleSortChange(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '0.6rem 0.75rem',
+            border: '1px solid #93c5fd',
+            borderRadius: '0.5rem',
+            backgroundColor: '#ffffff',
+            color: '#111827',
+          }}
         >
           <option value="">Default</option>
           <option value="price-asc">Price: Low to High</option>
